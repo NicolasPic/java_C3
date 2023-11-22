@@ -24,7 +24,7 @@ public class Main {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		//serve para a iniciar as funcionalidades basicas do programa
+		//serve para iniciar as funcionalidades basicas do programa
 		ArrayList<Produto> lista = new ArrayList<>();
 		String path = "C:\\temp\\Produtos.txt";
 		iniciar(lista,path);
@@ -96,55 +96,56 @@ public class Main {
 	//inserir produtos do arquivo na lista
 	public static void leitura(ArrayList<Produto> lista,String path) 
 	{
-		
-		String marca;
-		double preco;
-		int quantidade;
-		String modelo;
-		String tamanho;
-		int cc;
-		//buffer é mais eficinete para a leitura de dados.
-		//buffer precisa do file apra ser instanciado
-		try (BufferedReader br = new BufferedReader(new FileReader(path))) 
-		{
-			//ler a linha do arquivo
-			String linha = br.readLine();
-			if(linha == null) 
-			{
-			while (linha != null) 
-			{
-				String [] campos = linha.split(",");
-				
-				marca = campos[1];
-				//transforma para um numero;
-				preco=Double.parseDouble(campos[2]);
-				quantidade=Integer.parseInt(campos[3]);
-				modelo=campos[4];
-				if(campos[0]=="Carro") 
-				{
-					tamanho=campos[5];
-					lista.add(new Carro(marca,preco,quantidade,modelo,tamanho));
-				}
-				else if(campos[0]=="Moto")
-				{
-					cc=Integer.parseInt(campos[5]);
-					lista.add(new Moto(marca,preco,quantidade,modelo,cc));
-				}
-				
-				
-				linha = br.readLine();
-			}
 			
+			String marca;
+			double preco;
+			int quantidade;
+			String modelo;
+			String tamanho;
+			int cc;
+			//buffer é mais eficinete para a leitura de dados.
+			//buffer precisa do file apra ser instanciado
+			try (BufferedReader br = new BufferedReader(new FileReader(path))) 
+			{
+					//ler a linha do arquivo
+					String linha = br.readLine();		
+				
+					
+					while (linha != null && !linha.isBlank()) 
+					{
+						String [] campos = linha.split(",");
+						
+						marca = campos[1];
+						//transforma para um numero;
+						preco=Double.parseDouble(campos[2]);
+						quantidade=Integer.parseInt(campos[3]);
+						modelo=campos[4];
+						if(campos[0]=="Carro") 
+						{
+							tamanho=campos[5];
+							lista.add(new Carro(marca,preco,quantidade,modelo,tamanho));
+						}
+						else if(campos[0]=="Moto")
+						{
+							cc=Integer.parseInt(campos[5]);
+							lista.add(new Moto(marca,preco,quantidade,modelo,cc));
+						}
+						
+						
+						linha = br.readLine();
+					}
+				
+				
+				
+				
+				
+				printar(lista);
 			}
-			
-			printar(lista);
-		}
-		//exeção padrão para abrir arquivos
-		catch (IOException e) 
-		{
-			System.out.println("Error: " + e.getMessage());
-		}
-		
+			//exeção padrão para abrir arquivos
+			catch (IOException e) 
+			{
+				System.out.println("Error: " + e.getMessage());
+			}
 
 	}
 
@@ -309,8 +310,8 @@ public class Main {
 	// atualizar o arquivo
 	public static void atualizar(ArrayList<Produto> lista,String path) 
 	{
-				//buffer é mais eficinete para a escrita de dados.
-				//buffer precisa do file apra ser instanciado
+			//buffer é mais eficinete para a escrita de dados.
+			//buffer precisa do file apra ser instanciado
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) 
 			{
 				for (Produto e : lista) 
@@ -329,8 +330,19 @@ public class Main {
 	//inicar o programa
 	public static void iniciar(ArrayList<Produto> lista,String path)
 	{
+		//criar a pasta
 		boolean success = new File("C:\\temp").mkdir();
-		System.out.println("Arquivo criado com  "+ success);
+		System.out.println("Pasta criada: "+ success);
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) 
+		{
+			//criar arquivo vazio
+			bw.newLine();				
+			System.out.println("Arquivo criado");
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+	    }	
 		leitura(lista,path);
 	}
 	//finalizar o programa
@@ -344,6 +356,7 @@ public class Main {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			
 	    }				
 	}
 }
