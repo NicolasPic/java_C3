@@ -38,7 +38,7 @@ public abstract class Produto {
 	public void setModelo(String modelo) {
 		this.modelo = modelo;
 	}
-
+	//cria um objeto vazio
 	public Produto() {
 		marca = " ";
 		preco = 0;

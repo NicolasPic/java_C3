@@ -3,7 +3,7 @@ package entidades;
 public class Moto extends Produto{
 
 	private int cc;
-
+	//cria um objeto vazio
 	public Moto() {
 		super();
 		cc = 0;

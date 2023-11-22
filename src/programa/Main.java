@@ -21,8 +21,10 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
+		
 		Scanner sc = new Scanner(System.in);
 		
+		//serve para a iniciar as funcionalidades basicas do programa
 		ArrayList<Produto> lista = new ArrayList<>();
 		String path = "C:\\temp\\Produtos.txt";
 		iniciar(lista,path);
@@ -82,7 +84,9 @@ public class Main {
 			catch(RemocaoExcecao e)
 			{
 				System.out.println("Erro em remocao: " + e.getMessage());
-			} 
+			}
+			
+			
         } while (m != 6);
 		
 	   finalizar(path);
@@ -92,20 +96,27 @@ public class Main {
 	//inserir produtos do arquivo na lista
 	public static void leitura(ArrayList<Produto> lista,String path) 
 	{
+		
 		String marca;
 		double preco;
 		int quantidade;
 		String modelo;
 		String tamanho;
 		int cc;
-		
+		//buffer é mais eficinete para a leitura de dados.
+		//buffer precisa do file apra ser instanciado
 		try (BufferedReader br = new BufferedReader(new FileReader(path))) 
 		{
+			//ler a linha do arquivo
 			String linha = br.readLine();
+			if(linha == null) 
+			{
 			while (linha != null) 
 			{
 				String [] campos = linha.split(",");
-				marca =campos[1];
+				
+				marca = campos[1];
+				//transforma para um numero;
 				preco=Double.parseDouble(campos[2]);
 				quantidade=Integer.parseInt(campos[3]);
 				modelo=campos[4];
@@ -119,25 +130,28 @@ public class Main {
 					cc=Integer.parseInt(campos[5]);
 					lista.add(new Moto(marca,preco,quantidade,modelo,cc));
 				}
-				else
-				{
-					System.out.println("...");
-				}
+				
 				
 				linha = br.readLine();
 			}
+			
+			}
+			
 			printar(lista);
-		} 
+		}
+		//exeção padrão para abrir arquivos
 		catch (IOException e) 
 		{
 			System.out.println("Error: " + e.getMessage());
 		}
+		
 
 	}
 
 	//inserir um produto na lista e no arquivo
 	public static void insercao(ArrayList<Produto> lista) 
 	{
+		//suprimir alerta
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 
@@ -215,7 +229,7 @@ public class Main {
 		String marca, modelo;
 
 		if (lista.isEmpty() == true) 
-		{
+		{	//não pode ocorrer uma pesquisa com a lista vazia
 			throw new PesquisaExcecao("Lista esta vazia");
 		}
 		else 
@@ -233,6 +247,7 @@ public class Main {
 				} 
 				else 
 				{
+					//não pode achar um item que esta fora da lista
 					throw new PesquisaExcecao("Não esta na lista");
 				}
 
@@ -294,7 +309,8 @@ public class Main {
 	// atualizar o arquivo
 	public static void atualizar(ArrayList<Produto> lista,String path) 
 	{
-			
+				//buffer é mais eficinete para a escrita de dados.
+				//buffer precisa do file apra ser instanciado
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) 
 			{
 				for (Produto e : lista) 
@@ -323,7 +339,7 @@ public class Main {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) 
 		{
 			bw.newLine();				
-			System.out.println("Arquivo finalizado com sucesso");
+			System.out.println("Arquivo fechado com sucesso");
 		} 
 		catch (IOException e) 
 		{

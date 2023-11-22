@@ -8,7 +8,7 @@ public class Carro extends Produto{
 		super(marca, preco, quantidade, modelo);
 		this.tamanho = tamanho;
 	}
-
+	//cria um objeto vazio
 	public Carro() {
 		super();
 		tamanho = " ";
