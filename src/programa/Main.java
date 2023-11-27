@@ -227,7 +227,7 @@ public class Main {
 			System.out.println("Digite o modelo do produto: ");
 			modelo = sc.nextLine();
 			boolean existe=false;
-			
+			//se o produto existe,aumenta a quantidade
 			for(Produto e : lista)
 			{
 				if(e.getMarca().equals(marca) && e.getModelo().equals(modelo))
@@ -237,7 +237,7 @@ public class Main {
 				}
 			}
 			
-			//se o produto existe,aumenta a quantidade
+			//se o produto não existe,cria o produto
 			if(existe == false)
 			{
 				if (t == 1) 
