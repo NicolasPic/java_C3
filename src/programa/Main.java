@@ -226,46 +226,61 @@ public class Main {
 			sc.nextLine();
 			System.out.println("Digite o modelo do produto: ");
 			modelo = sc.nextLine();
-
-			if (t == 1) 
+			boolean existe=false;
+			
+			for(Produto e : lista)
 			{
-				System.out.println("Digite o tamanho do carro:\n1-Pequeno\n2-Medio\n3-Grande\n");
-				int x = sc.nextInt();
-				String tamanho;
-
-				if (x == 1) 
-				{				
-					tamanho = "Pequeno";
-					lista.add(new Carro(marca, preco, quantidade, modelo, tamanho));
-				} 
-				else if (x == 2) 
+				if(e.getMarca().equals(marca) && e.getModelo().equals(modelo))
 				{
-					tamanho = "Medio";
-					lista.add(new Carro(marca, preco, quantidade, modelo, tamanho));
-				} 
-				else if (x == 3) 
-				{
-					tamanho = "Grande";
-					lista.add(new Carro(marca, preco, quantidade, modelo, tamanho));
-				}
-				else 
-				{
-					throw new InsercaoExcecao("Error ao escolher o tamanho para o carro");
-				}
-			} 
-			else 
-			{
-				System.out.println("Digite a quantidade de cilindradas:");
-				int cc = sc.nextInt();
-				if (cc >= 1) 
-				{
-					lista.add(new Moto(marca, preco, quantidade, modelo, cc));
-				} 
-				else 
-				{
-					throw new InsercaoExcecao("Numero de cilindradas invalido");
+					e.setQuantidade(e.getQuantidade()+quantidade);
+					existe = true;
 				}
 			}
+			
+			//se o produto existe,aumenta a quantidade
+			if(existe == false)
+			{
+				if (t == 1) 
+				{
+					System.out.println("Digite o tamanho do carro:\n1-Pequeno\n2-Medio\n3-Grande\n");
+					int x = sc.nextInt();
+					String tamanho;
+
+					if (x == 1) 
+					{				
+						tamanho = "Pequeno";
+						lista.add(new Carro(marca, preco, quantidade, modelo, tamanho));
+					} 
+					else if (x == 2) 
+					{
+						tamanho = "Medio";
+						lista.add(new Carro(marca, preco, quantidade, modelo, tamanho));
+					} 
+					else if (x == 3) 
+					{
+						tamanho = "Grande";
+						lista.add(new Carro(marca, preco, quantidade, modelo, tamanho));
+					}
+					else 
+					{
+						throw new InsercaoExcecao("Error ao escolher o tamanho para o carro");
+					}
+				}
+				else 
+				{
+					System.out.println("Digite a quantidade de cilindradas:");
+					int cc = sc.nextInt();
+					if (cc >= 1) 
+					{
+						lista.add(new Moto(marca, preco, quantidade, modelo, cc));
+					} 
+					else 
+					{
+						throw new InsercaoExcecao("Numero de cilindradas invalido");
+					}
+				} 	
+			}
+					
 		} 
 		else 
 		{
