@@ -13,6 +13,7 @@ import entidades.Carro;
 import entidades.Moto;
 import entidades.Produto;
 import excecoes.AtualizarExcecao;
+import excecoes.ExcluirExcecao;
 import excecoes.InsercaoExcecao;
 import excecoes.PesquisaExcecao;
 import excecoes.RemocaoExcecao;
@@ -36,8 +37,8 @@ public class Main {
 			try
 			{
 				System.out.println();
-				System.out.println("1-Leitura\n" + "2-Insercao\n" + "3-Pesquisa\n"
-						+ "4-Remocao\n" + "5-Printar\n" + "6-Sair do programa");
+				System.out.println("1-Leitura\n" + "2-Insercao\n" + "3-Retirar\n"
+						+ "4-Excluir\n" + "5-Pesquisar\n" + "6-Printar\n"+ "7-Sair do programa");
 
 				System.out.println("DIGITE:");
 
@@ -52,17 +53,21 @@ public class Main {
 					atualizar(lista,path);
 					break;
 				case 3:
-					pesquisa(lista);
+					retirar(lista);
+					atualizar(lista,path);
 					break;
 				case 4:
-                	remocao(lista);
+                	excluir(lista);
                 	atualizar(lista,path);
                 	break;
 				case 5:
-					printar(lista);
+					pesquisa(lista);
 					break;
 				case 6:
-					m = 6;
+					printar(lista);
+					break;
+				case 7:
+					m = 7;
 					System.out.println("Programa finalizado");
 					break;
 				default:
@@ -83,11 +88,14 @@ public class Main {
 			}
 			catch(RemocaoExcecao e)
 			{
-				System.out.println("Erro em remocao: " + e.getMessage());
+				System.out.println("Erro em excluir: " + e.getMessage());
+			}
+			catch(ExcluirExcecao e)
+			{
+				System.out.println("Erro em excluir: " + e.getMessage());
 			}
 			
-			
-        } while (m != 6);
+        } while (m != 7);
 		
 	   finalizar(path);
        sc.close();
@@ -134,11 +142,7 @@ public class Main {
 						
 						linha = br.readLine();
 					}
-				
-				
-				
-				
-				
+					
 				printar(lista);
 			}
 			//exeção padrão para abrir arquivos
@@ -146,6 +150,53 @@ public class Main {
 			{
 				System.out.println("Error: " + e.getMessage());
 			}
+
+	}
+	
+	public static void retirar(ArrayList<Produto> lista)
+	{
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+		String marca, modelo;
+		int quantidade;
+		if (lista.isEmpty() == true) 
+		{	//não pode ocorrer uma pesquisa com a lista vazia
+			throw new ExcluirExcecao("Lista esta vazia");
+		}
+		else 
+		{
+			System.out.println("Digite a marca do produto:");
+			marca = sc.nextLine();
+			System.out.println("Digite o modelo do produto:");
+			modelo = sc.nextLine();
+			System.out.println("Quantos itens:");
+			quantidade = sc.nextInt();
+			for (Produto e : lista) 
+			{
+				if (e.getMarca().equals(marca) && e.getModelo().equals(modelo)) 
+				{
+					if(quantidade < 0) {
+						throw new RemocaoExcecao("Quantidade menor que 0");
+					}
+					else if(quantidade <= e.getQuantidade())
+					{
+					e.setQuantidade(e.getQuantidade()-quantidade);
+					break;
+					}
+					else if(quantidade > e.getQuantidade()) 
+					{
+						throw new RemocaoExcecao("Falta estoque");
+					}
+					
+				} 
+				else 
+				{
+					//não pode achar um item que esta fora da lista
+					throw new RemocaoExcecao("Não esta na lista");
+				}
+
+			}
+		}
 
 	}
 
@@ -258,7 +309,7 @@ public class Main {
 	}
 
 	//remover um produto da lista e no arquivo
-	public static void remocao(ArrayList<Produto> lista)
+	public static void excluir(ArrayList<Produto> lista)
 	{
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
@@ -266,7 +317,7 @@ public class Main {
 
 		if (lista.isEmpty() == true) 
 		{
-			throw new RemocaoExcecao("Lista esta vazia");
+			throw new ExcluirExcecao("Lista esta vazia");
 		} 
 		else 
 		{
@@ -279,12 +330,12 @@ public class Main {
 				if (e.getMarca().equals(marca) && e.getModelo().equals(modelo)) 
 				{
 					lista.remove(e);
-					System.out.println("Removido");
+					System.out.println("Excluido");
 					break;
 				} 
 				else 
 				{
-					throw new RemocaoExcecao("Não esta na lista");
+					throw new ExcluirExcecao("Não esta na lista");
 				}
 			}
 		}
