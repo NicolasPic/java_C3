@@ -88,7 +88,7 @@ public class Main {
 			}
 			catch(RemocaoExcecao e)
 			{
-				System.out.println("Erro em excluir: " + e.getMessage());
+				System.out.println("Erro em remocao: " + e.getMessage());
 			}
 			catch(ExcluirExcecao e)
 			{
@@ -161,7 +161,7 @@ public class Main {
 		int quantidade;
 		if (lista.isEmpty() == true) 
 		{	//não pode ocorrer uma pesquisa com a lista vazia
-			throw new ExcluirExcecao("Lista esta vazia");
+			throw new RemocaoExcecao("Lista esta vazia");
 		}
 		else 
 		{
@@ -171,6 +171,8 @@ public class Main {
 			modelo = sc.nextLine();
 			System.out.println("Quantos itens:");
 			quantidade = sc.nextInt();
+			//
+			boolean sucesso = false;
 			for (Produto e : lista) 
 			{
 				if (e.getMarca().equals(marca) && e.getModelo().equals(modelo)) 
@@ -178,23 +180,23 @@ public class Main {
 					if(quantidade < 0) {
 						throw new RemocaoExcecao("Quantidade menor que 0");
 					}
-					else if(quantidade <= e.getQuantidade())
+					else if(quantidade > e.getQuantidade())
 					{
-					e.setQuantidade(e.getQuantidade()-quantidade);
-					break;
+						throw new RemocaoExcecao("Falta de estoque");
 					}
-					else if(quantidade > e.getQuantidade()) 
+					else if(quantidade <= e.getQuantidade() )
 					{
-						throw new RemocaoExcecao("Falta estoque");
+						sucesso = true;
+						e.setQuantidade(e.getQuantidade()-quantidade);
+						break;
 					}
 					
-				} 
-				else 
-				{
-					//não pode achar um item que esta fora da lista
-					throw new RemocaoExcecao("Não esta na lista");
-				}
-
+				} 		
+			}
+			if(sucesso == false)
+			{
+			//não pode achar um item que esta fora da lista
+			throw new RemocaoExcecao("Não esta na lista");
 			}
 		}
 
@@ -211,6 +213,7 @@ public class Main {
 		double preco;
 		int quantidade;
 		String modelo;
+		boolean existe=false;
 
 		System.out.println("Carro - 1\nMoto - 2");
 		int t = sc.nextInt();
@@ -226,7 +229,7 @@ public class Main {
 			sc.nextLine();
 			System.out.println("Digite o modelo do produto: ");
 			modelo = sc.nextLine();
-			boolean existe=false;
+			
 			//se o produto existe,aumenta a quantidade
 			for(Produto e : lista)
 			{
@@ -294,6 +297,7 @@ public class Main {
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		String marca, modelo;
+		boolean sucesso=false;
 
 		if (lista.isEmpty() == true) 
 		{	//não pode ocorrer uma pesquisa com a lista vazia
@@ -309,17 +313,19 @@ public class Main {
 			{
 				if (e.getMarca().equals(marca) && e.getModelo().equals(modelo)) 
 				{
+					sucesso = true;
 					System.out.println("Produto encontrado: \n" + e.toString());
 					break;
 				} 
-				else 
-				{
-					//não pode achar um item que esta fora da lista
-					throw new PesquisaExcecao("Não esta na lista");
-				}
-
+				
+			}
+			if(sucesso == false) 
+			{
+				//não pode achar um item que esta fora da lista
+				throw new PesquisaExcecao("Não esta na lista");
 			}
 		}
+		
 
 	}
 
@@ -329,7 +335,7 @@ public class Main {
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		String marca, modelo;
-
+		boolean sucesso=false;
 		if (lista.isEmpty() == true) 
 		{
 			throw new ExcluirExcecao("Lista esta vazia");
@@ -343,15 +349,17 @@ public class Main {
 			for (Produto e : lista) 
 			{
 				if (e.getMarca().equals(marca) && e.getModelo().equals(modelo)) 
-				{
+				{	
+					sucesso=true;
 					lista.remove(e);
 					System.out.println("Excluido");
 					break;
 				} 
-				else 
-				{
-					throw new ExcluirExcecao("Não esta na lista");
-				}
+				
+			}
+			if(sucesso == false)
+			{
+				throw new ExcluirExcecao("Não esta na lista");
 			}
 		}
 
